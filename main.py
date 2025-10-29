@@ -1,16 +1,19 @@
 # Max Martin - Y10CSC
+from unittest import case
 
 # grid will be stored as 2d array
 grid = []
 
 GRID_SIZE = 10
 # TODO: support larger grid sizes
-LETTERS = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 
 CELL_EMPTY = ""
 CELL_HAS_SHIP = "o"
 CELL_HIT = "x"
 CELL_MISS = "."
+
+last_input_coordinate = None
 
 
 def setup_grid():
@@ -25,10 +28,12 @@ def setup_grid():
 # I call this "graceful error handling"
 # the program should NEVER just crash for the user
 def get_user_input():
+    global last_input_coordinate
     coordinate = input("Enter the coordinate (e.g. a8): ")
 
     # clean the input
-    coordinate = coordinate.strip().lower()
+    coordinate = coordinate.strip().upper()
+    last_input_coordinate = coordinate # save the cord for future reference
 
     # try split cord into a row and coll
     try:
@@ -48,9 +53,9 @@ def get_user_input():
 
     except ValueError:
         print("Invalid coordinate")
+        last_input_coordinate = None # cord was invalid, so clear
         return get_user_input() # get user input again
 
-    print(row, column)
     return row, column
 
 # rather than doing logic on the letter, just convert to the row number
@@ -60,18 +65,41 @@ def convert_letter_to_number(row):
         # add one because lists start at 0 but my rows will start at 1
         row_as_number = LETTERS.index(row) + 1
     except ValueError:
-        print("Invalid row, grid size may be to big")
+        print(f"Invalid row: {row}")
         return get_user_input() # get user input again
     return row_as_number
 
-def check_valid_move(row, column):
-    pass
+def play_move(row, column):
+    print(f"making move: {last_input_coordinate}")
+
+    # -1 because index starts at 0
+    cell = grid[row - 1][column - 1]
+
+    if cell == CELL_HIT:
+        print("already hit cell")
+    elif cell == CELL_MISS:
+        print("already miss cell")
+    elif cell == CELL_HAS_SHIP:
+        grid[row - 1][column - 1] = CELL_HIT
+        print("HIT")
+    elif cell == CELL_EMPTY:
+        grid[row - 1][column - 1] = CELL_MISS
+        print("MISS")
+    else:
+        print("invalid cell")
+
+    return
 
 # run
 def print_grid():
     for row in grid:
         print(row)
 
-setup_grid()
-print_grid()
-get_user_input()
+def main():
+    setup_grid()
+    game_running = True
+    while game_running:
+        row, column = get_user_input()
+        play_move(row, column)
+
+main()
