@@ -1,5 +1,4 @@
 # Max Martin - Y10CSC
-from unittest import case
 
 # grid will be stored as 2d array
 grid = []
