@@ -21,11 +21,11 @@ def setup_grid():
         grid.append(row) # add the row with empty cells to the grid
         # loop again with a new row
 
+def print_grid():
+    for row in grid:
+        print(row)
 
 setup_grid()
-for row in grid:
-    print(row)
-
-
+print_grid()
 
 
