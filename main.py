@@ -17,13 +17,13 @@ GRID_SIZE = 10
 LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 
 # how the cell states are stored in the grid
-GRID_CELL_EMPTY = ""
+GRID_CELL_EMPTY = " "
 GRID_CELL_HAS_SHIP = "o"
 GRID_CELL_HIT = "x"
 GRID_CELL_MISS = "."
 
 # how the cell states are stored visually on the buttons
-BUTTON_CELL_EMPTY = ""
+BUTTON_CELL_EMPTY = " "
 #BUTTON_CELL_HAS_SHIP = "o"
 BUTTON_CELL_HIT = "X"
 BUTTON_CELL_MISS = "O"
