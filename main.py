@@ -46,11 +46,6 @@ def setup_grid():
             row.append(GRID_CELL_EMPTY)  # put empty cells into that row
         grid.append(row)  # add the row with empty cells to the grid
 
-# used for debugging
-def print_grid():
-    for row in grid:
-        print(row)
-
 def on_button_cell_clicked(row, col):
     cell_button = buttons[row][col]
     grid_cell = grid[row][col]
@@ -63,7 +58,7 @@ def on_button_cell_clicked(row, col):
         ...
     elif grid_cell == GRID_CELL_HAS_SHIP:
         grid_cell = GRID_CELL_HIT
-        cell_button.config(text=GRID_CELL_HIT, state=tk.DISABLED)
+        cell_button.config(text=BUTTON_CELL_HIT, state=tk.DISABLED)
 
     elif grid_cell == GRID_CELL_EMPTY:
         grid_cell = GRID_CELL_MISS
@@ -113,6 +108,17 @@ def setup_grid_buttons():
             )
             label.grid(row=row + 1, column=0, padx=GRID_PADDING[0], pady=GRID_PADDING[1])
 
+
+#region DEBUGGING FUNCTIONS
+def guess_all_cells():
+    for row in range(GRID_SIZE):
+        for col in range(GRID_SIZE):
+            on_button_cell_clicked(row, col)
+
+def print_grid():
+    for row in grid:
+        print(row)
+#endregion
 
 setup_grid()
 setup_grid_buttons()
