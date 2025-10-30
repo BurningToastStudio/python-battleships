@@ -9,9 +9,8 @@ root.title("Battleships")
 
 # grid will be stored as 2d array
 grid = []
-buttons = []  # 2D list to store all button references
+buttons = []  # 2D list array to store all button references
 
-# have 1 extra because it includes the letter and number headings
 GRID_SIZE = 10
 # TODO: support larger grid sizes
 LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
@@ -38,8 +37,6 @@ LABEL_CELL_HEIGHT = 2
 
 GRID_PADDING = (0, 0)
 
-last_input_coordinate = None
-
 
 def setup_grid():
     # create 2d array
@@ -49,79 +46,28 @@ def setup_grid():
             row.append(GRID_CELL_EMPTY)  # put empty cells into that row
         grid.append(row)  # add the row with empty cells to the grid
 
-# will return a coordinate that is valid
-# I call this "graceful error handling"
-# the program should NEVER just crash for the user
-def get_user_input():
-    global last_input_coordinate
-    coordinate = input("Enter the coordinate (e.g. a8): ")
-
-    # clean the input
-    coordinate = coordinate.strip().upper()
-    last_input_coordinate = coordinate # save the cord for future reference
-
-    # try split cord into a row and coll
-    try:
-        row_as_letter = str(coordinate[0])
-        # converted to a number
-        row = convert_letter_to_number(row_as_letter)
-        # :1 means everything after the first character
-        # do this so it can store column "10"
-        column = int(coordinate[1:])
-        # check that the column and row are in range
-        # check more than 1
-        # check less than grid_size
-        if column < 1 or column > GRID_SIZE:
-            raise ValueError
-        if row < 1 or row > GRID_SIZE:
-            raise ValueError
-
-    except ValueError:
-        print("Invalid coordinate")
-        last_input_coordinate = None # cord was invalid, so clear
-        return get_user_input() # get user input again
-
-    return row, column
-
-# rather than doing logic on the letter, just convert to the row number
-def convert_letter_to_number(row):
-    try:
-        # get the index of the row letter in LETTERS
-        # add one because lists start at 0 but my rows will start at 1
-        row_as_number = LETTERS.index(row) + 1
-    except ValueError:
-        print(f"Invalid row: {row}")
-        return get_user_input() # get user input again
-    return row_as_number
-
-def play_move(row, column):
-    print(f"making move: {last_input_coordinate}")
-
-    # -1 because index starts at 0
-    cell = grid[row - 1][column - 1]
-
-    if cell == CELL_HIT:
-        print("already hit cell")
-    elif cell == CELL_MISS:
-        print("already miss cell")
-    elif cell == CELL_HAS_SHIP:
-        grid[row - 1][column - 1] = CELL_HIT
-        print("HIT")
-    elif cell == GRID_CELL_EMPTY:
-        grid[row - 1][column - 1] = CELL_MISS
-        print("MISS")
-    else:
-        print("invalid cell")
-
-    return
-
-# run
+# used for debugging
 def print_grid():
     for row in grid:
         print(row)
 
 def on_button_cell_clicked(row, col):
-    pass
+    cell_button = buttons[row][col]
+    grid_cell = grid[row][col]
+
+    if grid_cell == GRID_CELL_HIT:
+        # already played
+        ...
+    elif grid_cell == GRID_CELL_MISS:
+        # already played
+        ...
+    elif grid_cell == GRID_CELL_HAS_SHIP:
+        grid_cell = GRID_CELL_HIT
+        cell_button.config(text=GRID_CELL_HIT, state=tk.DISABLED)
+
+    elif grid_cell == GRID_CELL_EMPTY:
+        grid_cell = GRID_CELL_MISS
+        cell_button.config(text=BUTTON_CELL_MISS, state=tk.DISABLED)
 
 def setup_grid_buttons():
     # create frame to store the buttons
@@ -168,5 +114,6 @@ def setup_grid_buttons():
             label.grid(row=row + 1, column=0, padx=GRID_PADDING[0], pady=GRID_PADDING[1])
 
 
+setup_grid()
 setup_grid_buttons()
 tk.mainloop()
