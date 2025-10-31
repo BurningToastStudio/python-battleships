@@ -3,9 +3,9 @@ import tkinter as tk
 import random
 
 root = tk.Tk()
-root.geometry("500x500")
+root.geometry("470x470")
 root.title("Battleships")
-#root.resizable(False, False)
+root.resizable(False, False)
 
 
 # grid will be stored as 2d array
@@ -36,6 +36,10 @@ LABEL_CELL_FONT = "Arial", 10, "bold"
 LABEL_CELL_WIDTH = 4
 LABEL_CELL_HEIGHT = 2
 
+OCEAN_CELL_COLOR = "navyblue"
+HIT_CELL_COLOR = "red"
+MISS_CELL_COLOR = "grey"
+
 GRID_PADDING = (0, 0)
 
 
@@ -53,12 +57,12 @@ def on_button_cell_clicked(row, col):
     if grid[row][col] == GRID_CELL_HAS_SHIP:
         grid[row][col] = GRID_CELL_HIT
         # change it to hit
-        buttons[row][col].config(text=BUTTON_CELL_HIT, state=tk.DISABLED)
+        buttons[row][col].config(text=BUTTON_CELL_HIT, state=tk.DISABLED, bg=HIT_CELL_COLOR)
 
     elif grid[row][col] == GRID_CELL_EMPTY:
         grid[row][col] = GRID_CELL_MISS
         # change it to miss
-        buttons[row][col].config(text=BUTTON_CELL_MISS, state=tk.DISABLED)
+        buttons[row][col].config(text=BUTTON_CELL_MISS, state=tk.DISABLED, bg=MISS_CELL_COLOR)
 
 def setup_grid_buttons():
     # create frame to store the buttons
@@ -76,6 +80,7 @@ def setup_grid_buttons():
                 text=BUTTON_CELL_EMPTY,
                 width=BUTTON_CELL_WIDTH,
                 height=BUTTON_CELL_HEIGHT,
+                bg=OCEAN_CELL_COLOR,
                 command=lambda r=row, c=col: on_button_cell_clicked(r, c) # will call this when clicked
             )
             # place on grid
@@ -196,5 +201,4 @@ def print_grid():
 setup_grid()
 place_ships()
 setup_grid_buttons()
-guess_all_cells()
 tk.mainloop()
