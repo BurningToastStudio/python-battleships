@@ -1,17 +1,28 @@
 # Max Martin - Y10CSC
+
+#region Imports
 import tkinter as tk
 import random
 
+#endregion
+
+#region Window setup
 root = tk.Tk()
 root.geometry("470x470")
 root.title("Battleships")
 root.resizable(False, False)
+#endregion
 
-
+#region Globals
 # grid will be stored as 2d array
 grid = []
 buttons = []  # 2D list array to store all button references
+ship_cells_guessed = 0 # keep track of how many ships cells have been hit
+total_ship_cells = 0
+guess_count = 0
+#endregion
 
+#region Constants
 GRID_SIZE = 10
 # TODO: support larger grid sizes
 LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
@@ -41,8 +52,9 @@ HIT_CELL_COLOR = "red"
 MISS_CELL_COLOR = "grey"
 
 GRID_PADDING = (0, 0)
+#endregion
 
-
+#region Main Logic
 def setup_grid():
     # create 2d array
     for i in range(GRID_SIZE):
@@ -52,17 +64,35 @@ def setup_grid():
         grid.append(row)  # add the row with empty cells to the grid
 
 def on_button_cell_clicked(row, col):
+    global ship_cells_guessed, guess_count
+    guess_count += 1 # increment total guesses
 
     # check if the grid cell has a ship or not
-    if grid[row][col] == GRID_CELL_HAS_SHIP:
+    if grid[row][col] == GRID_CELL_HAS_SHIP: # that cell has a ship
+        ship_cells_guessed += 1 # increment correct guesses
         grid[row][col] = GRID_CELL_HIT
         # change it to hit
         buttons[row][col].config(text=BUTTON_CELL_HIT, state=tk.DISABLED, bg=HIT_CELL_COLOR)
 
-    elif grid[row][col] == GRID_CELL_EMPTY:
+    elif grid[row][col] == GRID_CELL_EMPTY: # that cell is empty
         grid[row][col] = GRID_CELL_MISS
         # change it to miss
         buttons[row][col].config(text=BUTTON_CELL_MISS, state=tk.DISABLED, bg=MISS_CELL_COLOR)
+
+    win_check() # after every guess, check if player has won
+
+def win_check():
+    if ship_cells_guessed == total_ship_cells:
+        has_won()
+
+def has_won():
+    root.destroy() # close window
+    i = 0
+    # prints you have won a bunch of times
+    while i < 50: # TODO: add a way to restart & dont use the terminal
+        print(f"YOU HAVE WON IN {guess_count} GUESSES")
+        i += 1 # basic itterator
+
 
 def setup_grid_buttons():
     # create frame to store the buttons
@@ -118,6 +148,8 @@ def setup_grid_buttons():
 
 def place_ships():
     # save ship type and size to a dictionary
+    global total_ship_cells
+    total_ship_cells = 17 # TODO: make this automaticly change
     ships = {
         "Carrier": 5,
         "Battleship": 4,
@@ -135,7 +167,6 @@ def place_ships():
             placed = try_place_ship(name, size)
 
     print_grid()
-
 
 def try_place_ship(name, size):
     # pick a random row and col
@@ -186,13 +217,9 @@ def try_place_ship(name, size):
 
     return True
 
+#endregion
 
-#region DEBUGGING FUNCTIONS
-def guess_all_cells():
-    for row in range(GRID_SIZE):
-        for col in range(GRID_SIZE):
-            on_button_cell_clicked(row, col)
-
+#region DEBUGGING FUNCTION
 def print_grid():
     for row in grid:
         print(row)
