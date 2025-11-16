@@ -3,7 +3,6 @@
 #region Imports
 import tkinter as tk
 import random
-
 #endregion
 
 #region Window setup
@@ -13,7 +12,7 @@ root.title("Battleships")
 root.resizable(False, False)
 #endregion
 
-#region Globals
+#region Global Variables
 # grid will be stored as 2d array
 grid = []
 buttons = []  # 2D list array to store all button references
@@ -35,7 +34,6 @@ GRID_CELL_MISS = "."
 
 # how the cell states are stored visually on the buttons
 BUTTON_CELL_EMPTY = " "
-#BUTTON_CELL_HAS_SHIP = "o"
 BUTTON_CELL_HIT = "X"
 BUTTON_CELL_MISS = "O"
 
